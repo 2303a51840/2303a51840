@@ -1,0 +1,284 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMAZSAV58ivsSzwlOmjSH1e",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/2303a51840/2303a51840/blob/main/lax%20exam\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Prediction of Recipe reviews and feedback\n",
+        "\n",
+        "Q1. Identify the recipe most appreciated?\n",
+        "\n",
+        "Q2. List the top 5 recipe prepared the most?\n",
+        "\n",
+        "Q3. Identify the recipe with the most users delight? in python\n",
+        "\n",
+        "Q4. Name the recipe with highest reputation?\n",
+        "\n",
+        "Q5. Most ordered recipes among the 100 recipes list?"
+      ],
+      "metadata": {
+        "id": "n38w80A96sp9"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "YVE-tzto4om9",
+        "outputId": "b1bc4ace-791f-4e54-9e7c-b96267d1d406"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "              recipe_name  review_count\n",
+            "0       Cheeseburger Soup           725\n",
+            "1      Creamy White Chili           654\n",
+            "2  Best Ever Banana Bread           509\n",
+            "3   Enchilada Casser-Ole!           421\n",
+            "4    Basic Homemade Bread           397\n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "# Load the dataset\n",
+        "data = pd.read_csv(\"/content/recipe+reviews+and+user+feedback+dataset.zip\")\n",
+        "\n",
+        "# Group data by recipe_name and count the number of reviews\n",
+        "top_prepared_recipes = (\n",
+        "    data.groupby(\"recipe_name\")[\"comment_id\"]\n",
+        "    .count()\n",
+        "    .sort_values(ascending=False)\n",
+        "    .head(5)\n",
+        "    .reset_index()\n",
+        "    .rename(columns={\"comment_id\": \"review_count\"})\n",
+        ")\n",
+        "\n",
+        "# Display the results\n",
+        "print(top_prepared_recipes)\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "most_appreciated_recipe = (\n",
+        "    data.groupby(\"recipe_name\")[\"stars\"]\n",
+        "    .mean()\n",
+        "    .sort_values(ascending=False)\n",
+        "    .reset_index()\n",
+        "    .iloc[0]\n",
+        ")\n",
+        "\n",
+        "print(\"Most appreciated recipe:\")\n",
+        "print(most_appreciated_recipe)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "dUSMzoHR6MiT",
+        "outputId": "67fce2af-5efd-4ec8-f089-2dfc32dd75e4"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Most appreciated recipe:\n",
+            "recipe_name    Rustic Italian Tortellini Soup\n",
+            "stars                                4.731343\n",
+            "Name: 0, dtype: object\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "top_prepared_recipes = (\n",
+        "    data.groupby(\"recipe_name\")[\"comment_id\"]\n",
+        "    .count()\n",
+        "    .sort_values(ascending=False)\n",
+        "    .head(5)\n",
+        "    .reset_index()\n",
+        "    .rename(columns={\"comment_id\": \"review_count\"})\n",
+        ")\n",
+        "\n",
+        "print(\"Top 5 most prepared recipes:\")\n",
+        "print(top_prepared_recipes)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "51CDtphd6ZpJ",
+        "outputId": "dab528b1-224a-4a47-e2a4-273a9cba4222"
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Top 5 most prepared recipes:\n",
+            "              recipe_name  review_count\n",
+            "0       Cheeseburger Soup           725\n",
+            "1      Creamy White Chili           654\n",
+            "2  Best Ever Banana Bread           509\n",
+            "3   Enchilada Casser-Ole!           421\n",
+            "4    Basic Homemade Bread           397\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "most_user_delight = (\n",
+        "    data.groupby(\"recipe_name\")[\"thumbs_up\"]\n",
+        "    .sum()\n",
+        "    .sort_values(ascending=False)\n",
+        "    .reset_index()\n",
+        "    .iloc[0]\n",
+        ")\n",
+        "\n",
+        "print(\"Recipe with the most user delight:\")\n",
+        "print(most_user_delight)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "vNvpgFDE6d7w",
+        "outputId": "2cc2c60c-09d9-42f9-9cc2-28c0ed7bb2fd"
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Recipe with the most user delight:\n",
+            "recipe_name    Amish Breakfast Casserole\n",
+            "thumbs_up                            971\n",
+            "Name: 0, dtype: object\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "highest_reputation_recipe = (\n",
+        "    data.groupby(\"recipe_name\")[\"user_reputation\"]\n",
+        "    .sum()\n",
+        "    .sort_values(ascending=False)\n",
+        "    .reset_index()\n",
+        "    .iloc[0]\n",
+        ")\n",
+        "\n",
+        "print(\"Recipe with the highest reputation:\")\n",
+        "print(highest_reputation_recipe)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "zaeEYUE46hwu",
+        "outputId": "58f734bd-3239-41fd-8960-53506196b36c"
+      },
+      "execution_count": 8,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Recipe with the highest reputation:\n",
+            "recipe_name        Cheeseburger Soup\n",
+            "user_reputation                 1179\n",
+            "Name: 0, dtype: object\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "top_100_recipes = (\n",
+        "    data.groupby(\"recipe_name\")[\"comment_id\"]\n",
+        "    .count()\n",
+        "    .sort_values(ascending=False)\n",
+        "    .head(100)\n",
+        "    .reset_index()\n",
+        "    .rename(columns={\"comment_id\": \"review_count\"})\n",
+        ")\n",
+        "\n",
+        "print(\"Top 100 most ordered recipes:\")\n",
+        "print(top_100_recipes)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "3AC5LunU6lm7",
+        "outputId": "394a18b0-5f60-4451-c61d-9ff5019b432d"
+      },
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Top 100 most ordered recipes:\n",
+            "                 recipe_name  review_count\n",
+            "0          Cheeseburger Soup           725\n",
+            "1         Creamy White Chili           654\n",
+            "2     Best Ever Banana Bread           509\n",
+            "3      Enchilada Casser-Ole!           421\n",
+            "4       Basic Homemade Bread           397\n",
+            "..                       ...           ...\n",
+            "95  Easy Peanut Butter Fudge            96\n",
+            "96    Blueberry French Toast            90\n",
+            "97        Caramel Heavenlies            86\n",
+            "98        Lime Chicken Tacos            86\n",
+            "99       Vegetarian Linguine            31\n",
+            "\n",
+            "[100 rows x 2 columns]\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
